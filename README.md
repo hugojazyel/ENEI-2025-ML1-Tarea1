@@ -40,15 +40,15 @@ En suma, **la expansión polinómica introduce fuerte colinealidad** entre $\{x,
 
 Para minimizar el MSE con **gradient descent** (misma inicialización; presupuesto fijo de iteraciones) se evaluaron dos tasas \(\eta\).
 
-- \(\eta = 10^{-3}\)  
-  - La curva de costo es monótona pero **convergencia lenta**; al tope de pasos no alcanza el óptimo práctico.  
-  - \(\mathrm{MSE}_{\mathrm{test}}\approx \mathbf{0.571}\) y \(\lVert \beta_{\mathrm{GD}}-\beta_{\mathrm{OLS}}\rVert_2\) no es despreciable (soluciones alejadas).
+- \(\eta = 10^{-3}\)
+  - La curva de costo es monótona pero convergencia lenta; al tope de pasos no alcanza el óptimo práctico.
+  - \( \text{MSE}_{\text{test}} \approx 0.571 \, \text{y} \| \beta_{\text{GD}} - \beta_{\text{OLS}} \|_2 \) no es despreciable (soluciones alejadas).
 
-- \(\eta = 10^{-2}\)  
-  - Convergencia **sustancialmente más rápida y estable**.  
-  - \(\mathrm{MSE}_{\mathrm{test}}\approx \mathbf{0.541}\), virtualmente igual a OLS; además \(\lVert \beta_{\mathrm{GD}}-\beta_{\mathrm{OLS}}\rVert_2 \approx \mathbf{0.0058}\) (parámetros casi idénticos).
+- \(\eta = 10^{-2}\)
+  - Convergencia sustancialmente más rápida y estable.
+  - \( \text{MSE}_{\text{test}} \approx 0.541 \), virtualmente igual a OLS; además \( \| \beta_{\text{GD}} - \beta_{\text{OLS}} \|_2 \approx 0.0058 \) (parámetros casi idénticos).
 
-De ello se desprende que, en un problema convexo como el MSE lineal, **una tasa moderada** (\(\eta = 10^{-2}\)) ofrece el mejor **compromiso velocidad–estabilidad**, reproduce la solución cerrada en métrica y parámetros, y evita tanto la ineficiencia de tasas muy pequeñas como el riesgo de oscilaciones de tasas grandes.
+De ello se desprende que, en un problema convexo como el MSE lineal, una tasa moderada (\(\eta = 10^{-2}\)) ofrece el mejor **compromiso velocidad–estabilidad**, reproduce la solución cerrada en métrica y parámetros, y evita tanto la ineficiencia de tasas muy pequeñas como el riesgo de oscilaciones de tasas grandes.
 
 ---
 
