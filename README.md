@@ -14,7 +14,7 @@
 
 ## Síntesis y respuestas para la Parte A, B y C
 
-## A. Differences observed between OLS, Ridge, and Lasso
+### A. Differences observed between OLS, Ridge, and Lasso
 
 Con las **8 variables estandarizadas** del *California Housing*  
 (*MedInc, HouseAge, AveRooms, AveBedrms, Population, AveOccup, Latitude, Longitude*), OLS sirve como línea base y Ridge/Lasso se contrastan tanto en error fuera de muestra como en la estructura de los coeficientes $\beta$.
@@ -36,23 +36,23 @@ En suma, **la expansión polinómica introduce fuerte colinealidad** entre $\{x,
 
 ---
 
-## B. Effect of learning rate on gradient descent
+### B. Effect of learning rate on gradient descent
 
-Para minimizar el MSE con **gradient descent** (misma inicialización; presupuesto fijo de iteraciones) se evaluaron dos tasas $\eta$.
+Para minimizar el MSE con **gradient descent** (misma inicialización; presupuesto fijo de iteraciones) se evaluaron dos tasas \(\eta\).
 
-- **$\eta=10^{-3}$**  
+- \(\eta = 10^{-3}\)  
   - La curva de costo es monótona pero **convergencia lenta**; al tope de pasos no alcanza el óptimo práctico.  
-  - $\text{MSE}_{\text{test}}\approx \mathbf{0.571}$ y $\lVert \beta_{\text{GD}}-\beta_{\text{OLS}}\rVert_2$ no es despreciable (soluciones alejadas).
+  - \(\mathrm{MSE}_{\mathrm{test}}\approx \mathbf{0.571}\) y \(\lVert \beta_{\mathrm{GD}}-\beta_{\mathrm{OLS}}\rVert_2\) no es despreciable (soluciones alejadas).
 
-- **$\eta=10^{-2}$**  
+- \(\eta = 10^{-2}\)  
   - Convergencia **sustancialmente más rápida y estable**.  
-  - $\text{MSE}_{\text{test}}\approx \mathbf{0.541}$, virtualmente igual a OLS; además $\lVert \beta_{\text{GD}}-\beta_{\text{OLS}}\rVert_2\approx \mathbf{0.0058}$ (parámetros casi idénticos).
+  - \(\mathrm{MSE}_{\mathrm{test}}\approx \mathbf{0.541}\), virtualmente igual a OLS; además \(\lVert \beta_{\mathrm{GD}}-\beta_{\mathrm{OLS}}\rVert_2 \approx \mathbf{0.0058}\) (parámetros casi idénticos).
 
-De ello se desprende que, en un problema convexo como el MSE lineal, **una tasa moderada** ($\eta=10^{-2}$) ofrece el mejor **compromiso velocidad–estabilidad**, reproduce la solución cerrada en métrica y parámetros, y evita tanto la ineficiencia de tasas muy pequeñas como el riesgo de oscilaciones de tasas grandes.
+De ello se desprende que, en un problema convexo como el MSE lineal, **una tasa moderada** (\(\eta = 10^{-2}\)) ofrece el mejor **compromiso velocidad–estabilidad**, reproduce la solución cerrada en métrica y parámetros, y evita tanto la ineficiencia de tasas muy pequeñas como el riesgo de oscilaciones de tasas grandes.
 
 ---
 
-## C. How k-fold cross-validation influenced the choice of regularization strength
+### C. How k-fold cross-validation influenced the choice of regularization strength
 
 Se utilizó **5-fold CV** con **Pipeline** para ajustar el preprocesamiento **dentro de cada fold** (evitando *data leakage*) y sintonizar $\alpha$ en Ridge/Lasso.
 
