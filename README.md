@@ -20,7 +20,7 @@ Con las **8 variables estandarizadas** del *California Housing*
 (*MedInc, HouseAge, AveRooms, AveBedrms, Population, AveOccup, Latitude, Longitude*), OLS sirve como línea base y Ridge/Lasso se contrastan tanto en error fuera de muestra como en la estructura de los coeficientes $\beta$.
 
 En primer lugar, el **desempeño en prueba** fue prácticamente indistinguible entre los tres modelos lineales en el espacio original:
-- **OLS / LinearRegression:** $\text{MSE}_{\text{test}}\approx \mathbf{0.5410}$, $R^2_{\text{test}}\approx \mathbf{0.6122}$.
+- **OLS / LinearRegression:** $$ \text{MSE}_{\text{test}} \approx 0.5410, \quad R^2_{\text{test}} \approx 0.6122 $$.
 - **Ridge (L2):** $\text{MSE}_{\text{test}}\approx \mathbf{0.5413}$ (muy próximo a OLS).
 - **Lasso (L1):** $\text{MSE}_{\text{test}}\approx \mathbf{0.5411}$ (también indistinguible de OLS).
 
