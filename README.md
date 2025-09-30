@@ -69,71 +69,54 @@ Por tanto, considerando simultáneamente CV y desempeño en test, Ridge con poli
 
 ## Síntesis y respuestas para la Parte D
 
-Este apartado aplica los conceptos de regresión lineal, gradiente descendente y regularización al dataset de alquiler de bicicletas (`hour.csv`), recopilado en Washington D.C. durante 2011–2012.
+Este apartado aplica **regresión lineal**, **descenso por gradiente** y **regularización** a la **demanda diaria** construida desde `hour.csv` (Washington D.C., 2011–2012).
 
-### 1. Preprocesamiento de datos
-- Fuente: archivo `hour.csv`, con registros horarios de demanda y condiciones climáticas.  
-- Transformaciones aplicadas:
-  - Conversión de `dteday` a tipo `datetime`.
-  - Agregación a nivel diario (731 observaciones):
-    - Suma: variables de conteo (`cnt`, `casual`, `registered`).
-    - Promedio: variables climáticas (`temp`, `atemp`, `hum`, `windspeed`).
-    - Moda: variables categóricas (`season`, `yr`, `mnth`, `weekday`, `holiday`, `workingday`, `weathersit`).  
-- Resultado: dataset diario con variables representativas de clima, calendario y demanda.
+### A. Differences observed between OLS, Ridge, and Lasso
 
----
+Usando agregados diarios (731 días) con predictores estandarizados de clima (promedios de `temp`, `atemp`, `hum`, `windspeed`) y calendario (`season`, `yr`, `mnth`, `weekday`, `holiday`, `workingday`, `weathersit`):
 
-### 2. Regresión OLS (desde cero)
-- Implementación manual de la ecuación normal:  
-  \[
-  \hat{\beta} = (X^\top X)^{-1}X^\top y
-  \]
-- Resultados en test:
-  - MSE ≈ 583,671  
-  - R² ≈ 0.833
-- Interpretación: la temperatura y el año incrementan la demanda, mientras que humedad, viento y clima adverso la reducen.
+- **Desempeño en test**
+  - **OLS (ecuación normal)**: **MSE ≈ 583 671**, **R² ≈ 0.833**.  
+  - **Ridge (L2)** con **α\* ≈ 5.96**: **MSE ≈ 584 478**, **R² ≈ 0.832**.  
+  - **Lasso (L1)** con **α\* ≈ 0.05**: **MSE ≈ 583 616**, **R² ≈ 0.833**.
+
+- **Estructura de coeficientes**
+  - **Ridge** encoge magnitudes **suavemente y de forma continua** al aumentar α; estabiliza pesos ante correlaciones (p. ej., `temp` vs. `atemp`).  
+  - **Lasso** induce **esparsidad**, apagando predictores débiles o redundantes y facilitando la interpretación **sin** penalizar el error aquí.
+
+- **Signos esperados**
+  - `temp` y `yr` se asocian positivamente con la demanda diaria; `hum`, `windspeed` y estados climáticos adversos (`weathersit`) la reducen.
+
+En conjunto, no hay ganancia sustantiva de MSE frente a OLS; la regularización aporta beneficios **estructurales** (estabilidad con L2, parsimonia con L1) más que mejoras de precisión en este conjunto.
 
 ---
 
-### 3. Gradiente Descendente (GD)
-- Se implementó GD para minimizar el MSE.  
-- Se probaron dos tasas de aprendizaje: η = 0.001 y η = 0.01.  
-- Ambos convergieron a soluciones cercanas a OLS.  
-- Mejor resultado (η=0.001):
-  - MSE ≈ 583,554  
-  - R² ≈ 0.833
+### B. Effect of learning rate on gradient descent
 
-Las curvas de costo muestran convergencia estable sin oscilaciones.
+Se implementó GD para minimizar el MSE del modelo lineal; se evaluaron dos tasas:
 
----
+- **η = 0.001**  
+  - Convergencia **estable** (más lenta).  
+  - **MSE(test) ≈ 583 554**, **R² ≈ 0.833** (indistinguible de OLS).
 
-### 4. Baseline con `scikit-learn`
-- Se entrenó `LinearRegression` con los mismos datos estandarizados.  
-- Los coeficientes y métricas coincidieron exactamente con OLS manual.  
-- Confirma la correcta implementación de la ecuación normal y la equivalencia entre ambas aproximaciones.
+- **η = 0.01**  
+  - Convergencia **más rápida** y sin oscilaciones en este problema convexo.  
+  - Métricas **prácticamente idénticas** a OLS.
+
+Dado que el MSE lineal es convexo y queda bien condicionado tras estandarizar, **GD converge a la solución de OLS** con tasas moderadas; η muy pequeña ⇒ ineficiencia, η muy grande ⇒ riesgo de oscilación/divergencia. En el rango probado, ambas tasas son válidas y reproducen la solución cerrada.
 
 ---
 
-### 5. Regularización (Ridge y Lasso)
-- Se evaluaron Ridge y Lasso con validación cruzada (10 folds).  
-- Mejores hiperparámetros:
-  - Ridge: α ≈ 5.96  
-  - Lasso: α ≈ 0.05
-- Resultados en test:
-  - Ridge → MSE ≈ 584,478, R² ≈ 0.832
-  - Lasso → MSE ≈ 583,616, R² ≈ 0.833
+### C. How k-fold cross-validation influenced the choice of regularization strength
 
-Ambos alcanzan desempeño prácticamente idéntico a OLS, con ligeras diferencias:
-- Ridge (L2): estabiliza coeficientes en presencia de colinealidad.  
-- Lasso (L1): introduce esparsidad, eliminando predictores redundantes.  
+Se usó validación cruzada K=10 para sintonizar α en Ridge y Lasso dentro de un `Pipeline` (el *scaler* se ajusta en cada fold, evitando *data leakage* y replicando la transformación en test).
 
----
+- **α\* seleccionados**
+  - **Ridge:** α\* ≈ **5.96**.  
+  - **Lasso:** α\* ≈ **0.05**.
 
-### 6. Conclusión 
-- El modelo lineal describe adecuadamente la demanda de bicicletas diarias (R² ≈ 0.83).  
-- OLS, GD y `LinearRegression` producen resultados equivalentes.  
-- Ridge y Lasso no mejoran sustancialmente el error en este dataset, pero ofrecen ventajas interpretativas:
-  - Ridge: mayor estabilidad de coeficientes.  
-  - Lasso: selección automática de variables.  
+- **Efecto en el desempeño**
+  - Con esos α\*, **Ridge** y **Lasso** quedan a la par de OLS (R² ≈ 0.83), lo que sugiere buena relación señal–ruido y ausencia de sobreajuste grave en el espacio lineal diario.  
+  - Aunque el MSE no mejora, la CV ancla α en zonas de control de varianza (Ridge) o parsimonia (Lasso) preservando la generalización.
 
-La Parte D nos confirma que la regularización es útil como herramienta de robustez, aunque en este caso no aporta mejoras significativas en el desempeño predictivo frente al modelo lineal base.
+En síntesis, para Bike Rentals el modelo lineal ya captura la mayor parte de la variación** (R² ≈ 0.83). La regularización sintonizada por k-fold CV mejora sobre todo la robustez (L2) o la interpretabilidad (L1) sin sacrificar precisión, guiando α hacia soluciones estables y parsimoniosas.
