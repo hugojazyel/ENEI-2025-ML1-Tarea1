@@ -20,7 +20,7 @@ Con las **8 variables estandarizadas** del *California Housing*
 (*MedInc, HouseAge, AveRooms, AveBedrms, Population, AveOccup, Latitude, Longitude*), OLS sirve como línea base y Ridge/Lasso se contrastan tanto en error fuera de muestra como en la estructura de los coeficientes $\beta$.
 
 En primer lugar, el **desempeño en prueba** fue prácticamente indistinguible entre los tres modelos lineales en el espacio original:
-- **OLS / LinearRegression:** $ \text{MSE}_{\text{test}} \approx 0.5410, \, R_{\text{test}}^{2} \approx 0.6122 $
+- **OLS / LinearRegression:** \(\mathrm{MSE(test)} \approx 0.5410\), \(R^2(\mathrm{test}) \approx 0.6122\)
 - **Ridge (L2):** $\text{MSE}_{\text{test}}\approx \mathbf{0.5413}$ (muy próximo a OLS).
 - **Lasso (L1):** $\text{MSE}_{\text{test}}\approx \mathbf{0.5411}$ (también indistinguible de OLS).
 
@@ -40,13 +40,13 @@ En suma, **la expansión polinómica introduce fuerte colinealidad** entre $\{x,
 
 Para minimizar el MSE con **gradient descent** (misma inicialización; presupuesto fijo de iteraciones) se evaluaron dos tasas $\eta$.
 
-- $ \eta = 10^{-3} $ 
+- **\(\eta = 10^{-3}\) (0.001):** 
   - La curva de costo es monótona pero **convergencia lenta**; al tope de pasos no alcanza el óptimo práctico.  
-  - $ MSE_{\text{test}} \approx 0.571 \, \text{y} \| \beta_{GD} - \beta_{OLS} \|_2 $ no es despreciable (soluciones alejadas)
+  - Al tope de iteraciones, \(\mathrm{MSE(test)} \approx 0.571\): no alcanza completamente la solución de OLS en el presupuesto de pasos.
 
-- $ \eta = 10^{-2} $  
+- **\(\eta = 10^{-2}\) (0.01):**  
   - Convergencia **sustancialmente más rápida y estable**.  
-  - $ MSE_{\text{test}} \approx 0.541 $, virtualmente igual a OLS; además $ \| \beta_{GD} - \beta_{OLS} \|_2 \approx 0.0058 $ (parámetros casi idénticos).
+  - \(\mathrm{MSE(test)} \approx 0.541\), prácticamente igual a OLS; además, \(\lVert\beta_{GD} - \beta_{OLS}\rVert_2\) es pequeña (parámetros casi idénticos).
 
 De ello se desprende que, en un problema convexo como el MSE lineal, **una tasa moderada** ($ \eta = 10^{-2} $) ofrece el mejor **compromiso velocidad–estabilidad**, reproduce la solución cerrada en métrica y parámetros, y evita tanto la ineficiencia de tasas muy pequeñas como el riesgo de oscilaciones de tasas grandes.
 
