@@ -20,7 +20,7 @@ Con las **8 variables estandarizadas** del *California Housing*
 (*MedInc, HouseAge, AveRooms, AveBedrms, Population, AveOccup, Latitude, Longitude*), OLS sirve como línea base y Ridge/Lasso se contrastan tanto en error fuera de muestra como en la estructura de los coeficientes $\beta$.
 
 En primer lugar, el **desempeño en prueba** fue prácticamente indistinguible entre los tres modelos lineales en el espacio original:
-- **OLS / LinearRegression:** $\text{MSE}_{\text{test}}\approx \mathbf{0.5410}$, $R^2_{\text{test}}\approx \mathbf{0.6122}$.
+- **OLS / LinearRegression:** $ \text{MSE}_{\text{test}} \approx 0.5410, \, R_{\text{test}}^{2} \approx 0.6122 $
 - **Ridge (L2):** $\text{MSE}_{\text{test}}\approx \mathbf{0.5413}$ (muy próximo a OLS).
 - **Lasso (L1):** $\text{MSE}_{\text{test}}\approx \mathbf{0.5411}$ (también indistinguible de OLS).
 
@@ -40,15 +40,15 @@ En suma, **la expansión polinómica introduce fuerte colinealidad** entre $\{x,
 
 Para minimizar el MSE con **gradient descent** (misma inicialización; presupuesto fijo de iteraciones) se evaluaron dos tasas $\eta$.
 
-- **$\eta=10^{-3}$**  
+- $ \eta = 10^{-3} $ 
   - La curva de costo es monótona pero **convergencia lenta**; al tope de pasos no alcanza el óptimo práctico.  
-  - $\text{MSE}_{\text{test}}\approx \mathbf{0.571}$ y $\lVert \beta_{\text{GD}}-\beta_{\text{OLS}}\rVert_2$ no es despreciable (soluciones alejadas).
+  - $ MSE_{\text{test}} \approx 0.571 \, \text{y} \| \beta_{GD} - \beta_{OLS} \|_2 $ no es despreciable (soluciones alejadas)
 
-- **$\eta=10^{-2}$**  
+- $ \eta = 10^{-2} $  
   - Convergencia **sustancialmente más rápida y estable**.  
-  - $\text{MSE}_{\text{test}}\approx \mathbf{0.541}$, virtualmente igual a OLS; además $\lVert \beta_{\text{GD}}-\beta_{\text{OLS}}\rVert_2\approx \mathbf{0.0058}$ (parámetros casi idénticos).
+  - $ MSE_{\text{test}} \approx 0.541 $, virtualmente igual a OLS; además $ \| \beta_{GD} - \beta_{OLS} \|_2 \approx 0.0058 $ (parámetros casi idénticos).
 
-De ello se desprende que, en un problema convexo como el MSE lineal, **una tasa moderada** ($\eta=10^{-2}$) ofrece el mejor **compromiso velocidad–estabilidad**, reproduce la solución cerrada en métrica y parámetros, y evita tanto la ineficiencia de tasas muy pequeñas como el riesgo de oscilaciones de tasas grandes.
+De ello se desprende que, en un problema convexo como el MSE lineal, **una tasa moderada** ($ \eta = 10^{-2} $) ofrece el mejor **compromiso velocidad–estabilidad**, reproduce la solución cerrada en métrica y parámetros, y evita tanto la ineficiencia de tasas muy pequeñas como el riesgo de oscilaciones de tasas grandes.
 
 ---
 
